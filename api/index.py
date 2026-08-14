@@ -52,6 +52,7 @@ def redact_docx_stream(redactor, file_stream, output_stream):
     doc.save(output_stream)
 
 @app.route('/api/redact', methods=['POST'])
+@app.route('/api/index.py', methods=['POST'])
 def redact_api():
     if 'file' not in request.files:
         return jsonify({"error": "No file uploaded"}), 400
