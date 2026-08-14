@@ -51,6 +51,21 @@ def redact_docx_stream(redactor, file_stream, output_stream):
                                 
     doc.save(output_stream)
 
+@app.route('/')
+def index():
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return send_file(os.path.join(root_dir, 'index.html'))
+
+@app.route('/index.css')
+def css():
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return send_file(os.path.join(root_dir, 'index.css'), mimetype='text/css')
+
+@app.route('/index.js')
+def js():
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return send_file(os.path.join(root_dir, 'index.js'), mimetype='application/javascript')
+
 @app.route('/api/redact', methods=['POST'])
 @app.route('/api/index.py', methods=['POST'])
 def redact_api():
