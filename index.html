@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PII Redactor - Secure Document Anonymization</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="background-effects">
+        <div class="blob blob-purple"></div>
+        <div class="blob blob-cyan"></div>
+    </div>
+    
+    <main class="app-container">
+        <header class="app-header">
+            <h1 class="gradient-text">PII Redactor</h1>
+            <p class="subtitle">Anonymize sensitive documents and ticket logs with professional, context-aware redaction</p>
+        </header>
+
+        <section class="glass-card main-card">
+            <form id="redaction-form" class="form-layout">
+                <!-- Dropzone Area -->
+                <div class="dropzone" id="file-dropzone">
+                    <input type="file" id="file-input" name="file" accept=".docx,.txt,.log" class="hidden-input">
+                    <div class="dropzone-content">
+                        <div class="upload-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 16v-8m0 8l-3-3m3 3l3-3M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
+                            </svg>
+                        </div>
+                        <p class="dropzone-main-text">Drag & drop your file here</p>
+                        <p class="dropzone-sub-text">Supports Microsoft Word (.docx) and text files (.txt, .log) up to 10MB</p>
+                        <div class="selected-file-badge hidden" id="file-badge">
+                            <span class="file-name" id="file-name-text">filename.docx</span>
+                            <button type="button" class="remove-file-btn" id="remove-file-btn">&times;</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PII Selector Area -->
+                <div class="pii-selectors-container">
+                    <h3 class="section-title">Select PII Types to Redact</h3>
+                    <div class="pii-grid">
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="name" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">Full Names</span>
+                        </label>
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="email" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">Emails</span>
+                        </label>
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="phone" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">Phone Numbers</span>
+                        </label>
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="company" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">Company Names</span>
+                        </label>
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="address" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">Addresses</span>
+                        </label>
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="ssn" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">SSN / Aadhaar / PAN</span>
+                        </label>
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="cc" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">Credit Cards</span>
+                        </label>
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="dob" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">Dates of Birth</span>
+                        </label>
+                        <label class="pii-checkbox-card">
+                            <input type="checkbox" name="types" value="ip" checked>
+                            <span class="checkbox-custom"></span>
+                            <span class="pii-label-text">IP Addresses</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="submit-btn" id="submit-btn" disabled>Redact Document</button>
+            </form>
+        </section>
+
+        <!-- Status Overlay / Progress -->
+        <section class="glass-card status-card hidden" id="status-card">
+            <div class="status-content">
+                <div class="spinner" id="status-spinner"></div>
+                <div class="success-icon hidden" id="status-success-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                    </svg>
+                </div>
+                <h3 class="status-title" id="status-title">Processing your document...</h3>
+                <p class="status-message" id="status-message">Executing rule-based contextual extraction.</p>
+                <div class="download-container hidden" id="download-container">
+                    <a href="#" class="download-btn" id="download-link">Download Redacted File</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="glass-card stats-card hidden" id="results-card">
+            <h3 class="section-title">Redaction Statistics</h3>
+            <div class="stats-grid" id="stats-grid">
+                <!-- Dynamically filled -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 PII Redactor. Powered by Scaler AI Labs.</p>
+    </footer>
+
+    <script src="index.js"></script>
+</body>
+</html>
