@@ -61,16 +61,12 @@ def redact_api():
     if not filename:
         return jsonify({"error": "Empty filename"}), 400
         
-    # Get active redaction options (default is all if none specified)
-    # The frontend can send which types should be redacted
     active_types = request.form.getlist('types')
     if not active_types:
         active_types = ["name", "email", "phone", "company", "address", "ssn", "cc", "dob", "ip"]
         
-    # Initialize redactor
     redactor = PIIRedactor()
     
-    # Run in-memory
     file_bytes = uploaded_file.read()
     ext = os.path.splitext(filename)[1].lower()
     
@@ -81,9 +77,6 @@ def redact_api():
             redact_docx_stream(redactor, input_stream, output_stream)
             output_stream.seek(0)
             
-            # Formulate stats response headers or we can send metadata
-            # To return both file and stats, we can put stats in custom response headers!
-            # This is extremely clean for direct downloads
             stats_str = ";".join(f"{k}:{v}" for k, v in redactor.counts.items())
             
             resp = send_file(
@@ -97,7 +90,6 @@ def redact_api():
             return resp
             
         else:
-            # Treat as plain text
             text_content = file_bytes.decode('utf-8', errors='ignore')
             redacted_text, _ = redactor.redact_text(text_content)
             
@@ -117,6 +109,5 @@ def redact_api():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# For local development
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
